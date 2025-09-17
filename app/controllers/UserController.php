@@ -30,7 +30,7 @@ class UserController extends Controller {
                 'email' => $email
             );
             if($this->UserModel->insert($data)){
-                redirect('users/show');
+                redirect('/');
             } else {
                 echo 'Something went wrong';
             }
@@ -52,7 +52,7 @@ class UserController extends Controller {
                 'email' => $email
             );
             if($this->UserModel->update($id, $data)){
-                redirect('users/show');
+                redirect('/');
             } else {
                 echo 'Something went wrong';
             }
@@ -63,7 +63,7 @@ class UserController extends Controller {
 
     public function delete($id){
         if($this->UserModel->delete($id)){
-            redirect('users/show');
+            redirect('/');
         } else {
             echo 'Something went wrong';
         }

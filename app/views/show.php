@@ -169,6 +169,56 @@
 <body>
   <div class="frame">
     <h1>Welcome to Show View</h1>
+
+    <!-- Search Form -->
+    <div style="margin-bottom: 30px; text-align: center;">
+      <form method="GET" action="<?=site_url('users/show');?>" style="display: inline-block;">
+        <input type="text"
+               name="search"
+               placeholder="Search by name or email..."
+               value="<?=html_escape($search ?? '');?>"
+               style="padding: 8px 15px;
+                      border: 2px solid #a1887f;
+                      border-radius: 6px;
+                      font-size: 14px;
+                      width: 300px;
+                      background: rgba(255, 248, 231, 0.9);
+                      color: #3e2723;">
+        <button type="submit"
+                style="padding: 8px 20px;
+                       background-color: #6d4c41;
+                       color: #fff;
+                       border: none;
+                       border-radius: 6px;
+                       cursor: pointer;
+                       font-weight: bold;
+                       margin-left: 10px;
+                       box-shadow: 0 0 10px rgba(141, 110, 99, 0.6);
+                       transition: all 0.3s ease-in-out;">Search</button>
+        <?php if (!empty($search)): ?>
+          <a href="<?=site_url('users/show');?>"
+             style="padding: 8px 15px;
+                    background-color: #a1887f;
+                    color: #fff;
+                    text-decoration: none;
+                    border-radius: 6px;
+                    margin-left: 10px;
+                    box-shadow: 0 0 10px rgba(141, 110, 99, 0.6);
+                    transition: all 0.3s ease-in-out;">Clear</a>
+        <?php endif; ?>
+      </form>
+    </div>
+
+    <!-- Results Info -->
+    <?php if (isset($total_users)): ?>
+      <div style="text-align: center; margin-bottom: 20px; color: #5d4037; font-weight: bold;">
+        Showing <?=$total_users > 0 ? (($current_page - 1) * $per_page) + 1 : 0;?>-<?=min($current_page * $per_page, $total_users);?> of <?=$total_users;?> results
+        <?php if (!empty($search)): ?>
+          for "<span style="color: #8d6e63;"><?=$search;?></span>"
+        <?php endif; ?>
+      </div>
+    <?php endif; ?>
+
     <table>
       <tr>
         <th>ID</th>
@@ -190,6 +240,14 @@
         </tr>
       <?php endforeach; ?>
     </table>
+
+    <!-- Pagination -->
+    <?php if (isset($pagination_links)): ?>
+      <div style="margin: 30px 0; text-align: center;">
+        <?=$pagination_links;?>
+      </div>
+    <?php endif; ?>
+
     <a href="<?=site_url('users/create');?>">Create Record</a>
   </div>
 </body>

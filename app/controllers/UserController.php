@@ -15,7 +15,32 @@ class UserController extends Controller {
     }
 
     public function show(){
-        $data['users'] = $this->UserModel->all();
+        // Get search and pagination parameters
+        $search = $this->io->get('search', '');
+        $page = $this->io->get('page', 1);
+        $per_page = 10;
+
+        // Calculate offset
+        $offset = ($page - 1) * $per_page;
+
+        // Get users with search and pagination
+        $data['users'] = $this->UserModel->get_users_with_search($search, $per_page, $offset);
+
+        // Get total count for pagination
+        $total_users = $this->UserModel->get_total_users($search);
+        $data['total_users'] = $total_users;
+        $data['total_pages'] = ceil($total_users / $per_page);
+        $data['current_page'] = $page;
+        $data['search'] = $search;
+        $data['per_page'] = $per_page;
+
+        // Initialize pagination
+        if ($total_users > $per_page) {
+            $this->call->library('Pagination');
+            $this->pagination->initialize($total_users, $per_page, $page, 'users/show');
+            $data['pagination_links'] = $this->pagination->paginate();
+        }
+
         $this->call->view('show', $data);
     }
 
